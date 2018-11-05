@@ -1,0 +1,29 @@
+{
+  "name": "node-console",
+  "version": "1.0.0",
+  "description": "bash console that uses xterm.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhildred/node-console.git"
+  },
+  "keywords": [
+    "xterm.js",
+    "node",
+    "express",
+    "static",
+    "console"
+  ],
+  "author": "Rich Hildred",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rhildred/node-console/issues"
+  },
+  "homepage": "https://github.com/rhildred/node-console#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
