@@ -15,9 +15,9 @@ app.set('port', process.env.PORT || parseInt(process.argv.pop()) || 8080);
 // Define the Document Root path
 var sPath = path.join(__dirname, '.');
 
-app.use(express.static(sPath));
+app.use("/console", express.static(sPath));
 
-app.post('/terminals', function (req, res) {
+app.post('/console/terminals', function (req, res) {
   var cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
       term = pty.spawn(process.platform === 'win32' ? 'cmd.exe' : 'bash', [], {
@@ -38,7 +38,7 @@ app.post('/terminals', function (req, res) {
   res.end();
 });
 
-app.post('/terminals/:pid/size', function (req, res) {
+app.post('/console/terminals/:pid/size', function (req, res) {
   var pid = parseInt(req.params.pid),
       cols = parseInt(req.query.cols),
       rows = parseInt(req.query.rows),
@@ -49,7 +49,7 @@ app.post('/terminals/:pid/size', function (req, res) {
   res.end();
 });
 
-app.ws('/terminals/:pid', function (ws, req) {
+app.ws('/console/terminals/:pid', function (ws, req) {
   var term = terminals[parseInt(req.params.pid)];
   console.log('Connected to terminal ' + term.pid);
   ws.send(logs[term.pid]);

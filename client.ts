@@ -82,12 +82,12 @@ function createTerminal(): void {
     }
     const cols = size.cols;
     const rows = size.rows;
-    const url = '/terminals/' + pid + '/size?cols=' + cols + '&rows=' + rows;
+    const url = '/console/terminals/' + pid + '/size?cols=' + cols + '&rows=' + rows;
 
     fetch(url, {method: 'POST'});
   });
   protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/terminals/';
+  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/console/terminals/';
 
   term.open(terminalContainer);
   term.winptyCompatInit();
@@ -131,7 +131,7 @@ function createTerminal(): void {
     // Set terminal size again to set the specific dimensions on the demo
     updateTerminalSize();
 
-    fetch('/terminals?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then((res) => {
+    fetch('/console/terminals?cols=' + term.cols + '&rows=' + term.rows, {method: 'POST'}).then((res) => {
       res.text().then((processId) => {
         pid = processId;
         socketURL += processId;
