@@ -65,8 +65,6 @@ function createTerminal(): void {
   term.open(terminalContainer);
   term.winptyCompatInit();
   term.webLinksInit();
-  console.log("width = " + terminalContainer.style.width);
-  console.log("height = " + terminalContainer.style.height);
   term.fit();
   term.focus();
 
@@ -178,10 +176,10 @@ function initOptions(term: TerminalType): void {
 
 }
 
-terminalContainer.addEventListener("resize", updateTerminalSize);
+window.addEventListener("resize", updateTerminalSize, false);
+
+
 
 function updateTerminalSize(): void {
-  terminalContainer.style.width = (terminalContainer.clientWidth - term._core.viewport.scrollBarWidth).toString()+"px";
-  terminalContainer.style.height = (terminalContainer.clientHeight - 20).toString()+"px";
   term.fit();
 }
