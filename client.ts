@@ -14,6 +14,7 @@ import * as fullscreen from './node_modules/xterm/lib/addons/fullscreen/fullscre
 import * as search from './node_modules/xterm/lib/addons/search/search';
 import * as webLinks from './node_modules/xterm/lib/addons/webLinks/webLinks';
 import * as winptyCompat from './node_modules/xterm/lib/addons/winptyCompat/winptyCompat';
+import * as socketIo from 'socket.io-client';
 
 // Pulling in the module's types relies on the <reference> above, it's looks a
 // little weird here as we're importing "this" module
@@ -58,8 +59,7 @@ function createTerminal(): void {
 
     fetch(url, {method: 'POST'});
   });
-  protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://';
-  socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + '/console/terminals/';
+  socketURL = location.protocol + "//" + location.hostname + ((location.port) ? (':' + location.port) : '') + '/console/terminals/';
 
   term.open(terminalContainer);
   term.winptyCompatInit();
@@ -79,10 +79,10 @@ function createTerminal(): void {
       res.text().then((processId) => {
         pid = processId;
         socketURL += processId;
-        socket = new WebSocket(socketURL);
-        socket.onopen = runRealTerminal;
-        socket.onclose = runFakeTerminal;
-        socket.onerror = runFakeTerminal;
+        socket = socketIo(socketURL);
+        runRealTerminal();
+        socket.on("reconnect_error" ,runFakeTerminal);
+        socket.on("connect_error", runFakeTerminal);
       });
     });
   }, 0);
