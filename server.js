@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var expressWs = require('express-ws')(app);
-var io = require('socket.io')();
 var os = require('os');
 var pty = require('node-pty');
 
@@ -93,7 +92,6 @@ app.ws('/console/terminals/:pid', function (ws, req) {
 
 // Listen for requests
 var server = app.listen(app.get('port'), () =>{
-  io.attach(server);
   var port = server.address().port;
   console.log('Listening on localhost:' + port);
   console.log("Document Root is " + sPath);
