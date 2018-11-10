@@ -10,7 +10,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 // Launch server
-cp.spawn('node', [path.resolve(__dirname, 'server.js')], { stdio: 'inherit' });
+cp.spawn('node', [path.resolve(__dirname, 'index.js')], { stdio: 'inherit' });
 
 // Build/watch client source
 const clientConfig = {

@@ -24,7 +24,7 @@ app.post('/console/terminals', function (req, res) {
         name: 'xterm-color',
         cols: cols || 80,
         rows: rows || 24,
-        cwd: process.env.PWD,
+        cwd: process.env.HOME,
         env: process.env
       });
 
