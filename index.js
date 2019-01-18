@@ -4,6 +4,14 @@ var app = express();
 var expressWs = require('express-ws')(app);
 var os = require('os');
 var pty = require('node-pty');
+var session = require('express-session');
+var https = require('https');
+var sess = {
+  secret: 'keyboard cat',
+  cookie: {}
+}
+
+app.use(session(sess))
 
 var terminals = {},
     logs = {};
@@ -14,6 +22,28 @@ app.set('port', process.env.PORT || parseInt(process.argv.pop()) || 8082);
 
 // Define the Document Root path
 var sPath = path.join(__dirname, '.');
+var oGithub = require("../docker-compose-ui/github.json");
+
+app.get("/console/", function(req, res, next){
+  if(req.session.username){
+    next();
+  }else{
+    return res.redirect("https://github.com/login/oauth/authorize?client_id=" + oGithub.client_id);
+  }
+});
+
+app.get("/console/oauth2callback", function(req, res){
+  //https://github.com/login/oauth/access_token
+	var options = {
+		host: 'github.com',
+		port: 443,
+    path: "/login/oauth/access_token",
+    method: "post"
+	};
+
+	var req = https.request(options, function (res) {  
+  console.log(req.query.code);
+});
 
 app.use("/console", express.static(sPath));
 
