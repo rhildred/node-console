@@ -19,11 +19,11 @@ var terminals = {},
 
 
 // Define the port to run on
-app.set('port', process.env.PORT || parseInt(process.argv.pop()) || 8082);
+app.set('port', process.env.PORT || parseInt(process.argv.pop()) || 1025);
 
 // Define the Document Root path
 var sPath = path.join(__dirname, '.');
-var oGithub = require("../docker-compose-ui/github.json");
+var oGithub = require(__dirname + "/github.json");
 
 app.get("/console/", function(req, res, next){
   if(req.session.username){
