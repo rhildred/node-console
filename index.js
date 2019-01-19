@@ -19,7 +19,7 @@ var terminals = {},
 
 
 // Define the port to run on
-app.set('port', process.env.PORT || parseInt(process.argv.pop()) || 1025);
+app.set('port', process.env.PORT || parseInt(process.argv.pop()) || 1026);
 
 // Define the Document Root path
 var sPath = path.join(__dirname, '.');
