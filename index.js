@@ -10,6 +10,7 @@ var sess = {
   secret: 'keyboard cat',
   cookie: {}
 }
+const fetch = require('node-fetch');
 
 app.use(session(sess))
 
@@ -32,17 +33,44 @@ app.get("/console/", function(req, res, next){
   }
 });
 
-app.get("/console/oauth2callback", function(req, res){
-  //https://github.com/login/oauth/access_token
-	var options = {
-		host: 'github.com',
-		port: 443,
-    path: "/login/oauth/access_token",
-    method: "post"
-	};
-
-	var req = https.request(options, function (res) {  
-  console.log(req.query.code);
+app.get("/console/oauth2callback", function(req, response){
+  sCode = req.query.code;
+  console.log(sCode);
+  oData = {
+    client_id: oGithub.client_id,
+    client_secret: oGithub.client_secret,
+    code: sCode,
+  }
+  fetch('https://github.com/login/oauth/access_token', {
+  method: 'post',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(oData)
+}).then(res=>res.json())
+  .then(res => {
+    console.log(res);
+    fetch("https://api.github.com/user", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': "token " + res.access_token
+      },      
+    }).then(res=>res.json())
+    .then(res =>{
+      console.log(res);
+      sUserName = res.login;
+      if(oGithub.logins.includes(sUserName)){
+        //then we are in
+        req.session.username = sUserName;
+        return response.redirect("/console/");
+      }else{
+        res.statusCode = 401;
+        return response.end("unauthorized");  
+      }
+    });
+  });
 });
 
 app.use("/console", express.static(sPath));
